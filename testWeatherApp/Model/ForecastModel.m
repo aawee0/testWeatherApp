@@ -4,6 +4,7 @@
 @interface ForecastModel ()
 
 @property (strong, nonatomic) NSString *city;
+@property (strong, nonatomic) NSString *cityId;
 @property (nonatomic) NSInteger tempMax;
 @property (nonatomic) NSInteger tempMin;
 @property (strong, nonatomic) NSString *desc;
@@ -19,6 +20,9 @@
     
     NSString *cityName = dict[@"name"];
     if (cityName) forecast.city = cityName;
+    
+    NSNumber *cityId = dict[@"id"];
+    if (cityId) forecast.cityId = [cityId stringValue];
     
     NSDictionary *main = dict[@"main"];
     if (main) {
@@ -46,6 +50,19 @@
     }
 
     return forecast;
+}
+
++ (NSArray *)initForecastArrayWithDictionary:(NSDictionary *)dict {
+    NSMutableArray *forecastArray = [[NSMutableArray alloc] init];
+    
+    NSArray *list = dict[@"list"];
+    if (list) {
+        for (int i = 0; i < list.count; i++) {
+            [forecastArray addObject: [ForecastModel initWithDictionary: [list objectAtIndex:i]]];
+        }
+    }
+    
+    return forecastArray;
 }
 
 + (NSInteger)convertToCelsius:(CGFloat)kelvinTemp {

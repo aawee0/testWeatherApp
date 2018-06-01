@@ -9,8 +9,10 @@
 
 @interface WeatherListViewController ()
 
-@property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) IBOutlet UITextField *addCityTextField;
+
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 @property (nonatomic, strong) NSMutableArray *forecastArray;
 
@@ -22,7 +24,8 @@
     [super viewDidLoad];
     
     _forecastArray = [[NSMutableArray alloc] init];
-    _tableView.allowsSelection = NO;
+    
+    [self initTableView];
     
     UINib *nib = [UINib nibWithNibName:@"CityWeatherCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:@"cityWeatherCell"];
@@ -32,11 +35,32 @@
     [super viewWillAppear:animated];
 }
 
+- (void)initTableView {
+    _tableView.allowsSelection = NO;
+    
+    _refreshControl = [[UIRefreshControl alloc] init];
+    [_tableView addSubview:_refreshControl];
+    [_refreshControl addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventValueChanged];
+}
+
+- (void)refreshTable {
+    NSMutableArray *idsArray = [[NSMutableArray alloc] init];
+    for (int i = 0; i < _forecastArray.count; i++) {
+        ForecastModel *forecast = [_forecastArray objectAtIndex:i];
+        [idsArray addObject: forecast.cityId];
+    }
+    [_forecastArray removeAllObjects];
+    
+    [self fetchForecastForCityList:idsArray];
+    
+    [_refreshControl endRefreshing];
+    [_tableView reloadData];
+}
+
 - (void)fetchForecastForCity:(NSString *)cityName {
     [ApiManager fetchForecastForCityApi:cityName withCompletion:^(NSData *data,
                                                                   NSURLResponse *response,
                                                                   NSError *error) {
-        
         if (data) {
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
                                                                  options:NSJSONReadingAllowFragments error:nil];
@@ -72,16 +96,55 @@
     }];
 }
 
+- (void)fetchForecastForCityList:(NSArray *)cities {
+    [ApiManager fetchForecastForSeveralCitiesApi:cities withCompletion:^(NSData *data,
+                                                                  NSURLResponse *response,
+                                                                  NSError *error) {
+        if (data) {
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
+                                                                 options:NSJSONReadingAllowFragments error:nil];
+            //ForecastModel *forecast = [ForecastModel initWithDictionary:dict];
+            NSArray *forecastArray = [ForecastModel initForecastArrayWithDictionary:dict];
+            
+            NSLog(@"(!) Response: %@ ", response);
+            NSLog(@"(!) Serialized data: %@ ", dict);
+            
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                if (error) {
+                    [self showAlertWithTitle:@"Error" andText:error.description andButtonNamed:@"Ok"];
+                    NSLog(@"(!) Error %ld: %@ ", error.code, error.description);
+                }
+                else {
+                    NSNumber *responseCode = dict[@"cod"];
+                    if (responseCode && [responseCode integerValue] != 200) {
+                        [self showAlertWithTitle:@"Oops!" andText:@"Something went wrong... please check your connection and try again." andButtonNamed:@"Ok"];
+                    }
+                    else {
+                        [self addCitiesFromArray:forecastArray];
+                    }
+                }
+            });
+        }
+        // BLOCK END
+    }];
+}
+
 - (IBAction)addNewCityButtonPressed:(id)sender {
     [self fetchForecastForCity:_addCityTextField.text];
 }
 
 - (void)addNewCity:(ForecastModel *)forecast {
-    [self.forecastArray addObject:forecast];
-    NSLog(@"New city added: %@ ", forecast.city, forecast.desc);
+    [_forecastArray addObject:forecast];
+    NSLog(@"New city added: %@ ", forecast.city);
     
-    self.addCityTextField.text = @"";
-    [self.tableView reloadData];
+    _addCityTextField.text = @"";
+    [_tableView reloadData];
+}
+
+- (void)addCitiesFromArray:(NSArray *)cities {
+    [_forecastArray addObjectsFromArray:cities];
+    
+    [_tableView reloadData];
 }
 
 #pragma mark - UITableViewDelegate
@@ -91,7 +154,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _forecastArray.count; // _instructionsArray.count;
+    return _forecastArray.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
