@@ -8,26 +8,38 @@
 
 /* Begin PBXBuildFile section */
 		861579DE20C061D800D8F01F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 861579DD20C061D800D8F01F /* AppDelegate.m */; };
-		861579E120C061D800D8F01F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 861579E020C061D800D8F01F /* ViewController.m */; };
-		861579E420C061D800D8F01F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 861579E220C061D800D8F01F /* Main.storyboard */; };
 		861579E720C061D800D8F01F /* testWeatherApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 861579E520C061D800D8F01F /* testWeatherApp.xcdatamodeld */; };
 		861579E920C061DE00D8F01F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 861579E820C061DE00D8F01F /* Assets.xcassets */; };
-		861579EC20C061DE00D8F01F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 861579EA20C061DE00D8F01F /* LaunchScreen.storyboard */; };
 		861579EF20C061DE00D8F01F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 861579EE20C061DE00D8F01F /* main.m */; };
+		861579F820C063A200D8F01F /* WeatherListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 861579F620C063A200D8F01F /* WeatherListViewController.m */; };
+		861579F920C063A200D8F01F /* WeatherListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 861579F720C063A200D8F01F /* WeatherListViewController.xib */; };
+		861579FE20C0643F00D8F01F /* CityWeatherCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 861579FC20C0643F00D8F01F /* CityWeatherCell.m */; };
+		861579FF20C0643F00D8F01F /* CityWeatherCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 861579FD20C0643F00D8F01F /* CityWeatherCell.xib */; };
+		86157A0120C071D200D8F01F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86157A0020C071D200D8F01F /* Default-568h@2x.png */; };
+		86157A0520C0FDFD00D8F01F /* ForecastModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 86157A0420C0FDFD00D8F01F /* ForecastModel.m */; };
+		86F679AB20C1054800760977 /* ApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 86F679AA20C1054800760977 /* ApiManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		861579D920C061D800D8F01F /* testWeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = testWeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		861579DC20C061D800D8F01F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		861579DD20C061D800D8F01F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		861579DF20C061D800D8F01F /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		861579E020C061D800D8F01F /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		861579E320C061D800D8F01F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		861579E620C061D800D8F01F /* testWeatherApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = testWeatherApp.xcdatamodel; sourceTree = "<group>"; };
 		861579E820C061DE00D8F01F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		861579EB20C061DE00D8F01F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		861579ED20C061DE00D8F01F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		861579EE20C061DE00D8F01F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		861579F520C063A200D8F01F /* WeatherListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeatherListViewController.h; sourceTree = "<group>"; };
+		861579F620C063A200D8F01F /* WeatherListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeatherListViewController.m; sourceTree = "<group>"; };
+		861579F720C063A200D8F01F /* WeatherListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WeatherListViewController.xib; sourceTree = "<group>"; };
+		861579FB20C0643F00D8F01F /* CityWeatherCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CityWeatherCell.h; sourceTree = "<group>"; };
+		861579FC20C0643F00D8F01F /* CityWeatherCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CityWeatherCell.m; sourceTree = "<group>"; };
+		861579FD20C0643F00D8F01F /* CityWeatherCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CityWeatherCell.xib; sourceTree = "<group>"; };
+		86157A0020C071D200D8F01F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		86157A0320C0FDFD00D8F01F /* ForecastModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ForecastModel.h; sourceTree = "<group>"; };
+		86157A0420C0FDFD00D8F01F /* ForecastModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ForecastModel.m; sourceTree = "<group>"; };
+		86A35E0520C1326D00CD770E /* testWeatherApp-PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "testWeatherApp-PrefixHeader.pch"; sourceTree = "<group>"; };
+		86F679A920C1054800760977 /* ApiManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApiManager.h; sourceTree = "<group>"; };
+		86F679AA20C1054800760977 /* ApiManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApiManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +56,7 @@
 		861579D020C061D800D8F01F = {
 			isa = PBXGroup;
 			children = (
+				86157A0020C071D200D8F01F /* Default-568h@2x.png */,
 				861579DB20C061D800D8F01F /* testWeatherApp */,
 				861579DA20C061D800D8F01F /* Products */,
 			);
@@ -62,16 +75,47 @@
 			children = (
 				861579DC20C061D800D8F01F /* AppDelegate.h */,
 				861579DD20C061D800D8F01F /* AppDelegate.m */,
-				861579DF20C061D800D8F01F /* ViewController.h */,
-				861579E020C061D800D8F01F /* ViewController.m */,
-				861579E220C061D800D8F01F /* Main.storyboard */,
+				861579F520C063A200D8F01F /* WeatherListViewController.h */,
+				861579F620C063A200D8F01F /* WeatherListViewController.m */,
+				861579F720C063A200D8F01F /* WeatherListViewController.xib */,
+				86157A0620C104F300D8F01F /* Api */,
+				86157A0220C0FCEE00D8F01F /* Model */,
+				861579FA20C0640C00D8F01F /* Cells */,
 				861579E820C061DE00D8F01F /* Assets.xcassets */,
-				861579EA20C061DE00D8F01F /* LaunchScreen.storyboard */,
 				861579ED20C061DE00D8F01F /* Info.plist */,
 				861579EE20C061DE00D8F01F /* main.m */,
+				86A35E0520C1326D00CD770E /* testWeatherApp-PrefixHeader.pch */,
 				861579E520C061D800D8F01F /* testWeatherApp.xcdatamodeld */,
 			);
 			path = testWeatherApp;
+			sourceTree = "<group>";
+		};
+		861579FA20C0640C00D8F01F /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				861579FB20C0643F00D8F01F /* CityWeatherCell.h */,
+				861579FC20C0643F00D8F01F /* CityWeatherCell.m */,
+				861579FD20C0643F00D8F01F /* CityWeatherCell.xib */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		86157A0220C0FCEE00D8F01F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				86157A0320C0FDFD00D8F01F /* ForecastModel.h */,
+				86157A0420C0FDFD00D8F01F /* ForecastModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		86157A0620C104F300D8F01F /* Api */ = {
+			isa = PBXGroup;
+			children = (
+				86F679A920C1054800760977 /* ApiManager.h */,
+				86F679AA20C1054800760977 /* ApiManager.m */,
+			);
+			name = Api;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -131,9 +175,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				861579EC20C061DE00D8F01F /* LaunchScreen.storyboard in Resources */,
 				861579E920C061DE00D8F01F /* Assets.xcassets in Resources */,
-				861579E420C061D800D8F01F /* Main.storyboard in Resources */,
+				86157A0120C071D200D8F01F /* Default-568h@2x.png in Resources */,
+				861579FF20C0643F00D8F01F /* CityWeatherCell.xib in Resources */,
+				861579F920C063A200D8F01F /* WeatherListViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,33 +189,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86F679AB20C1054800760977 /* ApiManager.m in Sources */,
+				86157A0520C0FDFD00D8F01F /* ForecastModel.m in Sources */,
 				861579E720C061D800D8F01F /* testWeatherApp.xcdatamodeld in Sources */,
-				861579E120C061D800D8F01F /* ViewController.m in Sources */,
 				861579EF20C061DE00D8F01F /* main.m in Sources */,
+				861579FE20C0643F00D8F01F /* CityWeatherCell.m in Sources */,
+				861579F820C063A200D8F01F /* WeatherListViewController.m in Sources */,
 				861579DE20C061D800D8F01F /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		861579E220C061D800D8F01F /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				861579E320C061D800D8F01F /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		861579EA20C061DE00D8F01F /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				861579EB20C061DE00D8F01F /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		861579F020C061DE00D8F01F /* Debug */ = {
@@ -288,6 +317,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/testWeatherApp/testWeatherApp-PrefixHeader.pch";
 				INFOPLIST_FILE = testWeatherApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -304,6 +335,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/testWeatherApp/testWeatherApp-PrefixHeader.pch";
 				INFOPLIST_FILE = testWeatherApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

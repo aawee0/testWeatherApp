@@ -1,10 +1,3 @@
-//
-//  AppDelegate.m
-//  testWeatherApp
-//
-//  Created by Evgeny Patrikeev on 31.05.2018.
-//  Copyright © 2018 Evgeny Patrikeev. All rights reserved.
-//
 
 #import "AppDelegate.h"
 
@@ -14,9 +7,15 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    WeatherListViewController *weatherVC = [[WeatherListViewController alloc] init];
+    
+    
+    
+    [self.window setRootViewController:weatherVC];
+    [self.window makeKeyAndVisible];
+    
     return YES;
 }
 

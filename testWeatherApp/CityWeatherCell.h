@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  CityWeatherCell.h
 //  testWeatherApp
 //
 //  Created by Evgeny Patrikeev on 31.05.2018.
@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+#import "ForecastModel.h"
 
+@interface CityWeatherCell : UITableViewCell
+
+- (void)initWithForecast:(ForecastModel *)forecast;
 
 @end
-

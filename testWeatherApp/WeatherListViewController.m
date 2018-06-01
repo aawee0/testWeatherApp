@@ -1,0 +1,138 @@
+
+#import "WeatherListViewController.h"
+#import "CityWeatherCell.h"
+
+#import "ApiManager.h"
+
+#import "ForecastModel.h"
+
+
+@interface WeatherListViewController ()
+
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
+@property (nonatomic, weak) IBOutlet UITextField *addCityTextField;
+
+@property (nonatomic, strong) NSMutableArray *forecastArray;
+
+@end
+
+@implementation WeatherListViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    _forecastArray = [[NSMutableArray alloc] init];
+    _tableView.allowsSelection = NO;
+    
+    UINib *nib = [UINib nibWithNibName:@"CityWeatherCell" bundle:nil];
+    [self.tableView registerNib:nib forCellReuseIdentifier:@"cityWeatherCell"];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
+
+- (void)fetchForecastForCity:(NSString *)cityName {
+    [ApiManager fetchForecastForCityApi:cityName withCompletion:^(NSData *data,
+                                                                  NSURLResponse *response,
+                                                                  NSError *error) {
+        
+        if (data) {
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
+                                                                 options:NSJSONReadingAllowFragments error:nil];
+            ForecastModel *forecast = [ForecastModel initWithDictionary:dict];
+            
+            NSLog(@"(!) Response: %@ ", response);
+            NSLog(@"(!) Serialized data: %@ ", dict);
+            
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                if (error) {
+                    [self showAlertWithTitle:@"Error" andText:error.description andButtonNamed:@"Ok"];
+                    NSLog(@"(!) Error %ld: %@ ", error.code, error.description);
+                }
+                else {
+                    NSNumber *responseCode = dict[@"cod"];
+                    if (!responseCode) {
+                        [self showAlertWithTitle:@"Oops!" andText:@"Something went wrong... please check your connection and try again." andButtonNamed:@"Ok"];
+                    }
+                    else if ([responseCode integerValue] == 404) {
+                        [self showAlertWithTitle:@"City not found" andText:nil andButtonNamed:@"Ok"];
+                    }
+                    else if ([responseCode integerValue] != 200) {
+                        NSString *message = dict[@"message"];
+                        if (message) [self showAlertWithTitle:@"Error" andText:message andButtonNamed:@"Ok"];
+                    }
+                    else {
+                        [self addNewCity:forecast];
+                    }
+                }
+            });
+        }
+        // BLOCK END
+    }];
+}
+
+- (IBAction)addNewCityButtonPressed:(id)sender {
+    [self fetchForecastForCity:_addCityTextField.text];
+}
+
+- (void)addNewCity:(ForecastModel *)forecast {
+    [self.forecastArray addObject:forecast];
+    NSLog(@"New city added: %@ ", forecast.city, forecast.desc);
+    
+    self.addCityTextField.text = @"";
+    [self.tableView reloadData];
+}
+
+#pragma mark - UITableViewDelegate
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return _forecastArray.count; // _instructionsArray.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    CityWeatherCell *cell =  [tableView dequeueReusableCellWithIdentifier:@"cityWeatherCell"];
+
+    [cell initWithForecast:[_forecastArray objectAtIndex:indexPath.row]];
+    
+    return cell;
+}
+
+-(NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Delete"  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
+        [self.forecastArray removeObjectAtIndex:indexPath.row];
+        [self.tableView reloadData];
+    }];
+    deleteAction.backgroundColor = [UIColor redColor];
+    return @[deleteAction];
+}
+
+#pragma mark - Misc methods
+
+- (void)showAlertWithTitle:(NSString *)title andText:(NSString *)text andButtonNamed:(NSString *)buttonName {
+    UIAlertController* alert = [UIAlertController
+                                alertControllerWithTitle:title
+                                message:text
+                                preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* ok = [UIAlertAction
+                         actionWithTitle:buttonName
+                         style:UIAlertActionStyleDefault
+                         handler:^(UIAlertAction * action)
+                         {
+                         }];
+
+    [alert addAction:ok];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+@end
