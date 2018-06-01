@@ -14,6 +14,9 @@
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 
+@property (nonatomic, weak) IBOutlet UIView *progressView;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
+
 @property (nonatomic, strong) NSMutableArray *forecastArray;
 
 @end
@@ -58,9 +61,11 @@
 }
 
 - (void)fetchForecastForCity:(NSString *)cityName {
+    [self showProgressView:YES];
     [ApiManager fetchForecastForCityApi:cityName withCompletion:^(NSData *data,
                                                                   NSURLResponse *response,
                                                                   NSError *error) {
+        [self showProgressView:NO];
         if (data) {
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
                                                                  options:NSJSONReadingAllowFragments error:nil];
@@ -97,9 +102,11 @@
 }
 
 - (void)fetchForecastForCityList:(NSArray *)cities {
+    [self showProgressView:YES];
     [ApiManager fetchForecastForSeveralCitiesApi:cities withCompletion:^(NSData *data,
                                                                   NSURLResponse *response,
                                                                   NSError *error) {
+        [self showProgressView:NO];
         if (data) {
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
                                                                  options:NSJSONReadingAllowFragments error:nil];
@@ -196,6 +203,12 @@
 
     [alert addAction:ok];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)showProgressView:(BOOL)show {
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        self.progressView.hidden = !show;
+    });
 }
 
 @end

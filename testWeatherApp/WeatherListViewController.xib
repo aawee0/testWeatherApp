@@ -11,7 +11,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WeatherListViewController">
             <connections>
+                <outlet property="activityIndicator" destination="dde-p1-Ive" id="Lcy-l0-VNL"/>
                 <outlet property="addCityTextField" destination="GSI-7A-nlj" id="dx2-bx-sMV"/>
+                <outlet property="progressView" destination="txf-Th-GUy" id="EhN-7X-Hjd"/>
                 <outlet property="tableView" destination="dNV-4f-ttd" id="0oq-YT-kmd"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -50,6 +52,27 @@
                         <outlet property="delegate" destination="-1" id="fHa-Go-eKY"/>
                     </connections>
                 </tableView>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="txf-Th-GUy">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <subviews>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="dde-p1-Ive">
+                            <rect key="frame" x="177" y="287" width="20" height="20"/>
+                        </activityIndicatorView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading. Please wait..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fNE-Fr-0D9">
+                            <rect key="frame" x="102.5" y="323" width="170" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="fNE-Fr-0D9" firstAttribute="centerX" secondItem="dde-p1-Ive" secondAttribute="centerX" id="0ry-Mm-Tqp"/>
+                        <constraint firstItem="fNE-Fr-0D9" firstAttribute="centerX" secondItem="txf-Th-GUy" secondAttribute="centerX" id="WK2-p5-tDo"/>
+                        <constraint firstItem="fNE-Fr-0D9" firstAttribute="top" secondItem="dde-p1-Ive" secondAttribute="bottom" constant="16" id="dYg-TT-Qav"/>
+                        <constraint firstItem="fNE-Fr-0D9" firstAttribute="centerY" secondItem="txf-Th-GUy" secondAttribute="centerY" id="eqT-fV-ccv"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.90196078431372551" green="0.90196078431372551" blue="0.90196078431372551" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -57,14 +80,18 @@
                 <constraint firstItem="CEP-at-Lgo" firstAttribute="leading" secondItem="GSI-7A-nlj" secondAttribute="trailing" constant="15" id="H7O-TF-hZf"/>
                 <constraint firstItem="dNV-4f-ttd" firstAttribute="top" secondItem="IVD-Mu-0IC" secondAttribute="bottom" id="I7e-W3-B1W"/>
                 <constraint firstItem="GSI-7A-nlj" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="30" id="MeA-0p-R8R"/>
+                <constraint firstItem="txf-Th-GUy" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Q26-Y2-cha"/>
                 <constraint firstAttribute="trailing" secondItem="CEP-at-Lgo" secondAttribute="trailing" constant="30" id="QmA-7W-Cls"/>
+                <constraint firstAttribute="bottom" secondItem="txf-Th-GUy" secondAttribute="bottom" id="VOg-xi-Ffj"/>
                 <constraint firstAttribute="trailing" secondItem="dNV-4f-ttd" secondAttribute="trailing" id="akD-kc-nqU"/>
                 <constraint firstItem="GSI-7A-nlj" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="30" id="amh-Dw-av1"/>
                 <constraint firstAttribute="bottom" secondItem="dNV-4f-ttd" secondAttribute="bottom" id="fG3-Pe-g6o"/>
                 <constraint firstItem="dNV-4f-ttd" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="kI2-kJ-QPz"/>
+                <constraint firstAttribute="trailing" secondItem="txf-Th-GUy" secondAttribute="trailing" id="nkJ-Es-Pmn"/>
                 <constraint firstItem="IVD-Mu-0IC" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="rV6-Uv-Y6N"/>
                 <constraint firstItem="CEP-at-Lgo" firstAttribute="centerY" secondItem="GSI-7A-nlj" secondAttribute="centerY" id="sLI-ee-P3N"/>
                 <constraint firstItem="dNV-4f-ttd" firstAttribute="top" secondItem="GSI-7A-nlj" secondAttribute="bottom" constant="30" id="tCa-lK-TmG"/>
+                <constraint firstItem="txf-Th-GUy" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="tlD-c9-J1M"/>
             </constraints>
             <point key="canvasLocation" x="25.5" y="51.5"/>
         </view>
