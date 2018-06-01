@@ -1,6 +1,8 @@
 
 #import "ForecastModel.h"
 
+#import "AppDelegate.h"
+
 @interface ForecastModel ()
 
 @property (strong, nonatomic) NSString *city;
@@ -67,6 +69,96 @@
 
 + (NSInteger)convertToCelsius:(CGFloat)kelvinTemp {
     return (NSInteger) (kelvinTemp - 273.15);
+}
+
+#pragma mark - Core Data
+
++ (void)updateCityForecastDB:(ForecastModel *)forecast {
+    NSManagedObjectContext *context = sharedAppDelegate.persistentContainer.viewContext;
+    NSError *error = nil;
+    
+    // check if exists
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"ForecastEntity"
+                                   inManagedObjectContext:context]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"cityId == %@", forecast.cityId];
+    [request setPredicate:predicate];
+    NSArray *forecastEntitiesArray = [context executeFetchRequest:request error:&error];
+    
+    NSManagedObject *forecastEntity;
+    if (forecastEntitiesArray.count > 0) { // exists -- update
+        forecastEntity = [forecastEntitiesArray objectAtIndex:0];
+    }
+    else { // not exists -- insert new
+        forecastEntity = [NSEntityDescription insertNewObjectForEntityForName:@"ForecastEntity"
+                                                       inManagedObjectContext:context];
+    }
+    [forecastEntity setValue:forecast.city forKey:@"city"];
+    [forecastEntity setValue:forecast.cityId forKey:@"cityId"];
+    [forecastEntity setValue:[NSNumber numberWithInteger:forecast.tempMax] forKey:@"tempMax"];
+    [forecastEntity setValue:[NSNumber numberWithInteger:forecast.tempMin] forKey:@"tempMin"];
+    [forecastEntity setValue:forecast.desc forKey:@"desc"];
+    [forecastEntity setValue:[NSNumber numberWithInteger:forecast.weatherId] forKey:@"weatherId"];
+    [forecastEntity setValue:forecast.weatherIcon forKey:@"weatherIcon"];
+    
+    if (![context save:&error]) {
+        NSLog(@"Save of ID #%@ failed", forecast.cityId);
+    }
+}
+
++ (NSArray *)getAllCityForecastsFromDB {
+    NSManagedObjectContext *context = sharedAppDelegate.persistentContainer.viewContext;
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *forecastEntity = [NSEntityDescription entityForName:@"ForecastEntity" inManagedObjectContext:context];
+    [fetchRequest setEntity:forecastEntity];
+    
+    NSError *error;
+    NSArray *forecastEntities = [context executeFetchRequest:fetchRequest error:&error];
+    
+    NSMutableArray *forecastArray = [[NSMutableArray alloc] init];
+    
+    for (NSManagedObject *forecastEntity in forecastEntities) {
+        ForecastModel *forecast = [[ForecastModel alloc] init];
+        
+        forecast.city = [forecastEntity valueForKey:@"city"];
+        forecast.cityId = [forecastEntity valueForKey:@"cityId"];
+        forecast.tempMax = [[forecastEntity valueForKey:@"tempMax"] integerValue];
+        forecast.tempMin = [[forecastEntity valueForKey:@"tempMin"] integerValue];
+        forecast.desc = [forecastEntity valueForKey:@"desc"];
+        forecast.weatherId = [[forecastEntity valueForKey:@"weatherId"] integerValue];
+        forecast.weatherIcon = [forecastEntity valueForKey:@"weatherIcon"];
+        
+        [forecastArray addObject:forecast];
+    }
+    
+    return forecastArray;
+}
+
++ (void)updateCityForecastsInDB:(NSArray *)forecastArray {
+    for (ForecastModel *forecast in forecastArray) {
+        [ForecastModel updateCityForecastDB:forecast];
+    }
+}
+
++ (void)deleteCityForecastFromDB:(NSString *)cityId {
+    NSManagedObjectContext *context = sharedAppDelegate.persistentContainer.viewContext;
+    NSError *error = nil;
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"ForecastEntity"
+                                   inManagedObjectContext:context]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"cityId == %@", cityId];
+    [request setPredicate:predicate];
+    NSArray *forecastEntitiesArray = [context executeFetchRequest:request error:&error];
+    
+    for (NSManagedObject *forecastEntity in forecastEntitiesArray) {
+        [context deleteObject:forecastEntity];
+    }
+    
+    if (![context save:&error]) {
+        NSLog(@"Delete of ID #%@ failed", cityId);
+    }
 }
 
 @end

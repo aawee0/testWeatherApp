@@ -11,8 +11,6 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     WeatherListViewController *weatherVC = [[WeatherListViewController alloc] init];
     
-    
-    
     [self.window setRootViewController:weatherVC];
     [self.window makeKeyAndVisible];
     
