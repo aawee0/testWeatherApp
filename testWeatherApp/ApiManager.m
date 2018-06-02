@@ -3,12 +3,21 @@
 
 @implementation ApiManager
 
-+ (void)fetchForecastForCityApi:(NSString *)cityName
-             withCompletion:(void(^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
++ (void)fetchForecastForCityByName:(NSString *)cityName
+                        orCoordinates:(CGPoint)point
+                       withCompletion:(void(^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
     
-    NSString *safeCityName = [cityName stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
-    NSString *paramsString = [[NSString alloc] initWithFormat:@"%@weather?q=%@&appid=%@",
-                            OWMAP_APIURL, safeCityName, APPID];
+    NSString *paramsString;
+    if (cityName) { // by city name
+        NSString *safeCityName =
+            [cityName stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
+        paramsString = [[NSString alloc] initWithFormat:@"%@weather?q=%@&appid=%@",
+                        OWMAP_APIURL, safeCityName, APPID];
+    }
+    else { // by coordinates
+        paramsString = [[NSString alloc] initWithFormat:@"%@weather?lat=%f&lon=%f&appid=%@",
+                        OWMAP_APIURL, point.x, point.y, APPID];
+    }
     
     [ApiManager sendGETRequestWithParams:paramsString withCompletion:completionHandler];
 }

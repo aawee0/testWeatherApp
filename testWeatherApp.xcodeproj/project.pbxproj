@@ -17,6 +17,8 @@
 		861579FF20C0643F00D8F01F /* CityWeatherCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 861579FD20C0643F00D8F01F /* CityWeatherCell.xib */; };
 		86157A0120C071D200D8F01F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86157A0020C071D200D8F01F /* Default-568h@2x.png */; };
 		86157A0520C0FDFD00D8F01F /* ForecastModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 86157A0420C0FDFD00D8F01F /* ForecastModel.m */; };
+		86A35E0920C252D600CD770E /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A35E0720C252D600CD770E /* MapViewController.m */; };
+		86A35E0A20C252D600CD770E /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86A35E0820C252D600CD770E /* MapViewController.xib */; };
 		86F679AB20C1054800760977 /* ApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 86F679AA20C1054800760977 /* ApiManager.m */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +40,9 @@
 		86157A0320C0FDFD00D8F01F /* ForecastModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ForecastModel.h; sourceTree = "<group>"; };
 		86157A0420C0FDFD00D8F01F /* ForecastModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ForecastModel.m; sourceTree = "<group>"; };
 		86A35E0520C1326D00CD770E /* testWeatherApp-PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "testWeatherApp-PrefixHeader.pch"; sourceTree = "<group>"; };
+		86A35E0620C252D600CD770E /* MapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		86A35E0720C252D600CD770E /* MapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		86A35E0820C252D600CD770E /* MapViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapViewController.xib; sourceTree = "<group>"; };
 		86F679A920C1054800760977 /* ApiManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApiManager.h; sourceTree = "<group>"; };
 		86F679AA20C1054800760977 /* ApiManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApiManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -78,6 +83,9 @@
 				861579F520C063A200D8F01F /* WeatherListViewController.h */,
 				861579F620C063A200D8F01F /* WeatherListViewController.m */,
 				861579F720C063A200D8F01F /* WeatherListViewController.xib */,
+				86A35E0620C252D600CD770E /* MapViewController.h */,
+				86A35E0720C252D600CD770E /* MapViewController.m */,
+				86A35E0820C252D600CD770E /* MapViewController.xib */,
 				86157A0620C104F300D8F01F /* Api */,
 				86157A0220C0FCEE00D8F01F /* Model */,
 				861579FA20C0640C00D8F01F /* Cells */,
@@ -178,6 +186,7 @@
 				861579E920C061DE00D8F01F /* Assets.xcassets in Resources */,
 				86157A0120C071D200D8F01F /* Default-568h@2x.png in Resources */,
 				861579FF20C0643F00D8F01F /* CityWeatherCell.xib in Resources */,
+				86A35E0A20C252D600CD770E /* MapViewController.xib in Resources */,
 				861579F920C063A200D8F01F /* WeatherListViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -192,6 +201,7 @@
 				86F679AB20C1054800760977 /* ApiManager.m in Sources */,
 				86157A0520C0FDFD00D8F01F /* ForecastModel.m in Sources */,
 				861579E720C061D800D8F01F /* testWeatherApp.xcdatamodeld in Sources */,
+				86A35E0920C252D600CD770E /* MapViewController.m in Sources */,
 				861579EF20C061DE00D8F01F /* main.m in Sources */,
 				861579FE20C0643F00D8F01F /* CityWeatherCell.m in Sources */,
 				861579F820C063A200D8F01F /* WeatherListViewController.m in Sources */,

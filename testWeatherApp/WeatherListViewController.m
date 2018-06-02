@@ -1,6 +1,7 @@
 
 #import "WeatherListViewController.h"
 #import "CityWeatherCell.h"
+#import "MapViewController.h"
 
 #import "ApiManager.h"
 
@@ -25,7 +26,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     [self initTableView];
 }
 
@@ -69,57 +70,67 @@
     }
     
     [_refreshControl endRefreshing];
-    [self fetchForecastForCityList:idsArray withProgressView:progressView];
+    if (idsArray.count > 0) [self fetchForecastForCityList:idsArray withProgressView:progressView];
 }
 
-- (void)fetchForecastForCity:(NSString *)cityName { // single city
+- (void)fetchForecastForCityByName:(NSString *)cityName {
+    [self fetchForecastForCityByName:cityName orCoordinates:CGPointMake(0, 0)];
+}
+
+- (void)fetchForecastForCityByName:(NSString *)cityName orCoordinates:(CGPoint)point { // single city
     // check if already in list
     BOOL alreadyInList = NO;
-    for (ForecastModel *forecast in _forecastArray) {
-        if ([forecast.city isEqualToString:cityName]) alreadyInList = YES;
+    if (cityName) {
+        for (ForecastModel *forecast in _forecastArray) {
+            if ([forecast.city isEqualToString:cityName]) alreadyInList = YES;
+        }
     }
     if (alreadyInList) {
         [self showAlertWithTitle:@"City is already in list" andText:nil andButtonNamed:@"Ok"];
     }
     else { // if not, then add
         [self showProgressView:YES];
-        [ApiManager fetchForecastForCityApi:cityName withCompletion:^(NSData *data,
-                                                                      NSURLResponse *response,
-                                                                      NSError *error) {
-            [self showProgressView:NO];
-            if (data) {
-                NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
-                                                                     options:NSJSONReadingAllowFragments error:nil];
-                ForecastModel *forecast = [ForecastModel initWithDictionary:dict];
-                
-                NSLog(@"(!) Response: %@ ", response);
-                NSLog(@"(!) Serialized data: %@ ", dict);
-                
-                dispatch_async(dispatch_get_main_queue(), ^(){
-                    if (error) {
-                        [self showAlertWithTitle:@"Error" andText:error.description andButtonNamed:@"Ok"];
-                        NSLog(@"(!) Error %ld: %@ ", error.code, error.description);
-                    }
-                    else {
-                        NSNumber *responseCode = dict[@"cod"];
-                        if (!responseCode) {
-                            [self showAlertWithTitle:@"Oops!" andText:@"Something went wrong... please check your connection and try again." andButtonNamed:@"Ok"];
-                        }
-                        else if ([responseCode integerValue] == 404) {
-                            [self showAlertWithTitle:@"City not found" andText:nil andButtonNamed:@"Ok"];
-                        }
-                        else if ([responseCode integerValue] != 200) {
-                            NSString *message = dict[@"message"];
-                            if (message) [self showAlertWithTitle:@"Error" andText:message andButtonNamed:@"Ok"];
-                        }
-                        else {
-                            [self addNewCity:forecast];
-                        }
-                    }
-                });
-            }
-            // BLOCK END
-        }];
+        [ApiManager
+         fetchForecastForCityByName:cityName orCoordinates:point
+         withCompletion:^(NSData *data,
+                          NSURLResponse *response,
+                          NSError *error) {
+             [self showProgressView:NO];
+             if (data) {
+                 NSDictionary *dict =
+                 [NSJSONSerialization JSONObjectWithData:data
+                                                 options:NSJSONReadingAllowFragments error:nil];
+                 ForecastModel *forecast = [ForecastModel initWithDictionary:dict];
+                 
+                 NSLog(@"(!) Response: %@ ", response);
+                 NSLog(@"(!) Serialized data: %@ ", dict);
+                 
+                 // UI changes, main thread
+                 dispatch_async(dispatch_get_main_queue(), ^(){
+                     if (error) {
+                         [self showAlertWithTitle:@"Error" andText:error.description andButtonNamed:@"Ok"];
+                         NSLog(@"(!) Error %ld: %@ ", error.code, error.description);
+                     }
+                     else {
+                         NSNumber *responseCode = dict[@"cod"];
+                         if (!responseCode) {
+                             [self showAlertWithTitle:@"Oops!" andText:@"Something went wrong... please check your connection and try again." andButtonNamed:@"Ok"];
+                         }
+                         else if ([responseCode integerValue] == 404) {
+                             [self showAlertWithTitle:@"City not found" andText:nil andButtonNamed:@"Ok"];
+                         }
+                         else if ([responseCode integerValue] != 200) {
+                             NSString *message = dict[@"message"];
+                             if (message) [self showAlertWithTitle:@"Error" andText:message andButtonNamed:@"Ok"];
+                         }
+                         else {
+                             [self addNewCity:forecast];
+                         }
+                     }
+                 });
+             }
+             // BLOCK END
+         }];
     }
 }
 
@@ -132,12 +143,12 @@
         if (data) {
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
                                                                  options:NSJSONReadingAllowFragments error:nil];
-            //ForecastModel *forecast = [ForecastModel initWithDictionary:dict];
             NSArray *forecastArray = [ForecastModel initForecastArrayWithDictionary:dict];
             
             NSLog(@"(!) Response: %@ ", response);
             NSLog(@"(!) Serialized data: %@ ", dict);
             
+            // UI changes, main thread
             dispatch_async(dispatch_get_main_queue(), ^(){
                 if (error) {
                     [self showAlertWithTitle:@"Error" andText:error.description andButtonNamed:@"Ok"];
@@ -158,8 +169,17 @@
     }];
 }
 
+- (IBAction)mapButtonPressed:(id)sender {
+    MapViewController *mapVC = [[MapViewController alloc] init];
+    mapVC.completionBlock = ^(CGPoint point) {
+        [self fetchForecastForCityByName:nil orCoordinates:point];
+    };
+    
+    [self.navigationController pushViewController:mapVC animated:YES];
+}
+
 - (IBAction)addNewCityButtonPressed:(id)sender {
-    [self fetchForecastForCity:_addCityTextField.text];
+    [self fetchForecastForCityByName: _addCityTextField.text];
 }
 
 - (void)addNewCity:(ForecastModel *)forecast {
@@ -183,8 +203,8 @@
 
 - (void)deleteCityAtIndex:(NSInteger)index {
     NSString *idToDelete = [[_forecastArray objectAtIndex:index] cityId];
-    
     [_forecastArray removeObjectAtIndex:index];
+    
     [_tableView reloadData];
     
     [ForecastModel deleteCityForecastFromDB:idToDelete];
@@ -206,14 +226,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     CityWeatherCell *cell =  [tableView dequeueReusableCellWithIdentifier:@"cityWeatherCell"];
-
     [cell initWithForecast:[_forecastArray objectAtIndex:indexPath.row]];
-    
     return cell;
 }
 
 -(NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Delete"  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
         [self deleteCityAtIndex:indexPath.row];
     }];

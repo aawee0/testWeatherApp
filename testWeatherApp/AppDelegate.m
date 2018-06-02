@@ -3,15 +3,20 @@
 
 @interface AppDelegate ()
 
+@property (strong, nonatomic) UINavigationController *navigationController;
+
 @end
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    WeatherListViewController *weatherVC = [[WeatherListViewController alloc] init];
     
-    [self.window setRootViewController:weatherVC];
+    WeatherListViewController *weatherVC = [[WeatherListViewController alloc] init];
+    _navigationController = [[UINavigationController alloc] initWithRootViewController:weatherVC];
+    _navigationController.delegate = self;
+    
+    [self.window setRootViewController:_navigationController];
     [self.window makeKeyAndVisible];
     
     return YES;
@@ -90,6 +95,16 @@
         NSLog(@"Unresolved error %@, %@", error, error.userInfo);
         abort();
     }
+}
+
+#pragma mark - Navigation controller delegate
+
+- (void)navigationController:(UINavigationController *)navController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated{
+    // hide the nav bar if going home
+    if (viewController.class == [WeatherListViewController class]) {
+        [navController setNavigationBarHidden:YES animated:animated];
+    }
+    else [navController setNavigationBarHidden:NO animated:animated];
 }
 
 @end
