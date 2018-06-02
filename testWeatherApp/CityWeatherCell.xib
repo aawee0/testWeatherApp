@@ -48,7 +48,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Eqd-oJ-01w">
-                        <rect key="frame" x="166" y="46" width="147" height="31.5"/>
+                        <rect key="frame" x="186" y="46" width="127" height="31.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -70,7 +70,7 @@
                     <constraint firstItem="vDW-WE-P6g" firstAttribute="centerY" secondItem="miw-4o-FW9" secondAttribute="centerY" id="H8j-Qo-9jD"/>
                     <constraint firstAttribute="bottom" secondItem="Eqd-oJ-01w" secondAttribute="bottom" constant="8" id="Hj0-9I-K2R"/>
                     <constraint firstItem="miw-4o-FW9" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="4" id="Kxv-as-brX"/>
-                    <constraint firstItem="Eqd-oJ-01w" firstAttribute="leading" secondItem="miw-4o-FW9" secondAttribute="leading" constant="-20" id="MTP-1e-w4U"/>
+                    <constraint firstItem="Eqd-oJ-01w" firstAttribute="leading" secondItem="miw-4o-FW9" secondAttribute="leading" id="MTP-1e-w4U"/>
                     <constraint firstItem="DZJ-Wm-RhI" firstAttribute="centerY" secondItem="miw-4o-FW9" secondAttribute="centerY" id="PsA-XP-shH"/>
                     <constraint firstItem="DqF-T5-R1W" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="0.52" id="Qfs-sh-bjt"/>
                     <constraint firstItem="Eqd-oJ-01w" firstAttribute="top" secondItem="miw-4o-FW9" secondAttribute="bottom" id="UPP-xQ-Yxa"/>
