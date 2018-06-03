@@ -114,7 +114,7 @@
                      else {
                          NSNumber *responseCode = dict[@"cod"];
                          if (!responseCode) {
-                             [self showAlertWithTitle:@"Oops!" andText:@"Something went wrong... please check your connection and try again." andButtonNamed:@"Ok"];
+                             [self showUnknownError];
                          }
                          else if ([responseCode integerValue] == 404) {
                              [self showAlertWithTitle:@"City not found" andText:nil andButtonNamed:@"Ok"];
@@ -129,6 +129,7 @@
                      }
                  });
              }
+             else [self showUnknownError];
              // BLOCK END
          }];
     }
@@ -157,7 +158,7 @@
                 else {
                     NSNumber *responseCode = dict[@"cod"];
                     if (responseCode && [responseCode integerValue] != 200) {
-                        [self showAlertWithTitle:@"Oops!" andText:@"Something went wrong... please check your connection and try again." andButtonNamed:@"Ok"];
+                        [self showUnknownError];
                     }
                     else {
                         [self addCitiesFromArray:forecastArray];
@@ -165,6 +166,7 @@
                 }
             });
         }
+        else [self showUnknownError];
         // BLOCK END
     }];
 }
@@ -255,6 +257,10 @@
 
     [alert addAction:ok];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)showUnknownError {
+    [self showAlertWithTitle:@"Oops!" andText:@"Something went wrong... please check your connection and try again." andButtonNamed:@"Ok"];
 }
 
 - (void)showProgressView:(BOOL)show {
