@@ -15,10 +15,6 @@
     [self initMapView];
     
     self.navigationItem.title = @"Select location"; // screen title
-    [[self navigationItem] setBackBarButtonItem:
-     [[UIBarButtonItem alloc] initWithTitle:@" " style:UIBarButtonItemStylePlain
-                                     target:nil action:nil]]; // rename back button
-    
 }
 
 - (void)initMapView {
@@ -39,10 +35,6 @@
     [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
     NSLog(@"Coordinates selected: ( %f , %f ) ",
           touchMapCoordinate.latitude, touchMapCoordinate.longitude);
-    
-    MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
-    annotation.coordinate = touchMapCoordinate;
-    [self.mapView addAnnotation:annotation];
     
     [self proceedSelectionWithPoint:
      CGPointMake(touchMapCoordinate.latitude, touchMapCoordinate.longitude)];

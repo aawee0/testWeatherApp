@@ -5,6 +5,6 @@
 
 @interface CityWeatherCell : UITableViewCell
 
-- (void)initWithForecast:(ForecastModel *)forecast;
+- (void)updateWithForecast:(ForecastModel *)forecast;
 
 @end

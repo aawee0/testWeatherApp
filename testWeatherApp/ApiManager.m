@@ -9,8 +9,7 @@
     
     NSString *paramsString;
     if (cityName) { // by city name
-        NSString *safeCityName =
-            [cityName stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
+        NSString *safeCityName = [cityName stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
         paramsString = [[NSString alloc] initWithFormat:@"%@weather?q=%@&appid=%@",
                         OWMAP_APIURL, safeCityName, APPID];
     }

@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -24,27 +25,30 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="City name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GSI-7A-nlj">
-                    <rect key="frame" x="77" y="30" width="231" height="30"/>
+                    <rect key="frame" x="77" y="50" width="231" height="30"/>
                     <nil key="textColor"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="8Jq-dy-lD9"/>
+                    </connections>
                 </textField>
                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CEP-at-Lgo">
-                    <rect key="frame" x="318" y="24" width="42" height="42"/>
+                    <rect key="frame" x="318" y="44" width="42" height="42"/>
                     <inset key="contentEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                     <connections>
                         <action selector="addNewCityButtonPressed:" destination="-1" eventType="touchUpInside" id="1WZ-9V-VUP"/>
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IVD-Mu-0IC" userLabel="Divider">
-                    <rect key="frame" x="0.0" y="89" width="375" height="1"/>
+                    <rect key="frame" x="0.0" y="109" width="375" height="1"/>
                     <color key="backgroundColor" red="0.78431372549019607" green="0.78431372549019607" blue="0.78431372549019607" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="F6H-h9-u6d"/>
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dNV-4f-ttd">
-                    <rect key="frame" x="0.0" y="90" width="375" height="577"/>
+                    <rect key="frame" x="0.0" y="110" width="375" height="557"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                     <connections>
@@ -53,7 +57,7 @@
                     </connections>
                 </tableView>
                 <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LhL-Vf-DvX">
-                    <rect key="frame" x="20" y="24" width="42" height="42"/>
+                    <rect key="frame" x="20" y="44" width="42" height="42"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="42" id="Mj0-0s-iAD"/>
@@ -92,11 +96,11 @@
                 <constraint firstAttribute="trailing" secondItem="IVD-Mu-0IC" secondAttribute="trailing" id="E8X-w4-aFA"/>
                 <constraint firstItem="CEP-at-Lgo" firstAttribute="leading" secondItem="GSI-7A-nlj" secondAttribute="trailing" constant="10" id="H7O-TF-hZf"/>
                 <constraint firstItem="dNV-4f-ttd" firstAttribute="top" secondItem="IVD-Mu-0IC" secondAttribute="bottom" id="I7e-W3-B1W"/>
-                <constraint firstItem="GSI-7A-nlj" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="30" id="MeA-0p-R8R"/>
                 <constraint firstItem="txf-Th-GUy" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Q26-Y2-cha"/>
                 <constraint firstAttribute="trailing" secondItem="CEP-at-Lgo" secondAttribute="trailing" constant="15" id="QmA-7W-Cls"/>
                 <constraint firstItem="LhL-Vf-DvX" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="Sn4-Xw-Qll"/>
                 <constraint firstAttribute="bottom" secondItem="txf-Th-GUy" secondAttribute="bottom" id="VOg-xi-Ffj"/>
+                <constraint firstItem="GSI-7A-nlj" firstAttribute="top" secondItem="xFr-LP-UZ8" secondAttribute="top" constant="30" id="YD7-vf-Ehd"/>
                 <constraint firstAttribute="trailing" secondItem="dNV-4f-ttd" secondAttribute="trailing" id="akD-kc-nqU"/>
                 <constraint firstAttribute="bottom" secondItem="dNV-4f-ttd" secondAttribute="bottom" id="fG3-Pe-g6o"/>
                 <constraint firstItem="dNV-4f-ttd" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="kI2-kJ-QPz"/>
@@ -108,6 +112,7 @@
                 <constraint firstItem="GSI-7A-nlj" firstAttribute="leading" secondItem="LhL-Vf-DvX" secondAttribute="trailing" constant="15" id="thd-Mw-jre"/>
                 <constraint firstItem="txf-Th-GUy" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="tlD-c9-J1M"/>
             </constraints>
+            <viewLayoutGuide key="safeArea" id="xFr-LP-UZ8"/>
             <point key="canvasLocation" x="25.5" y="51.5"/>
         </view>
     </objects>

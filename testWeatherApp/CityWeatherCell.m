@@ -18,7 +18,7 @@
     [super awakeFromNib];
 }
 
-- (void)initWithForecast:(ForecastModel *)forecast {
+- (void)updateWithForecast:(ForecastModel *)forecast {
     [_cellTitleLabel setText:forecast.city];
     
     [_cellTempMaxLabel setText:[NSString stringWithFormat:@"%ld°", forecast.tempMax]];

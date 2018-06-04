@@ -1,6 +1,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface WeatherListViewController : UIViewController <UINavigationControllerDelegate>
+@interface WeatherListViewController : UIViewController <UINavigationControllerDelegate, UITextFieldDelegate>
 
 @end

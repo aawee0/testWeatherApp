@@ -28,6 +28,18 @@
     [super viewDidLoad];
 
     [self initTableView];
+    
+    [_addCityTextField setReturnKeyType:UIReturnKeyDone];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -45,6 +57,12 @@
     // FETCH: use forecasts from API
     [self refreshTableWithProgressView:NO];
 }
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - Init methods
 
 - (void)initTableView {
     _tableView.allowsSelection = NO;
@@ -72,6 +90,8 @@
     [_refreshControl endRefreshing];
     if (idsArray.count > 0) [self fetchForecastForCityList:idsArray withProgressView:progressView];
 }
+
+#pragma mark - API-related
 
 - (void)fetchForecastForCityByName:(NSString *)cityName {
     [self fetchForecastForCityByName:cityName orCoordinates:CGPointMake(0, 0)];
@@ -105,29 +125,30 @@
                  NSLog(@"(!) Response: %@ ", response);
                  NSLog(@"(!) Serialized data: %@ ", dict);
                  
-                 // UI changes, main thread
-                 dispatch_async(dispatch_get_main_queue(), ^(){
-                     if (error) {
-                         [self showAlertWithTitle:@"Error" andText:error.description andButtonNamed:@"Ok"];
-                         NSLog(@"(!) Error %ld: %@ ", error.code, error.description);
+                 // UI changes
+                 
+                 if (error) {
+                     [self showAlertWithTitle:@"Error" andText:error.description andButtonNamed:@"Ok"];
+                     NSLog(@"(!) Error %ld: %@ ", error.code, error.description);
+                 }
+                 else {
+                     NSNumber *responseCode = dict[@"cod"];
+                     if (!responseCode) {
+                         [self showUnknownError];
+                     }
+                     else if ([responseCode integerValue] == 404) {
+                         [self showAlertWithTitle:@"City not found" andText:nil andButtonNamed:@"Ok"];
+                     }
+                     else if ([responseCode integerValue] != 200) {
+                         NSString *message = dict[@"message"];
+                         if (message) [self showAlertWithTitle:@"Error" andText:message andButtonNamed:@"Ok"];
                      }
                      else {
-                         NSNumber *responseCode = dict[@"cod"];
-                         if (!responseCode) {
-                             [self showUnknownError];
-                         }
-                         else if ([responseCode integerValue] == 404) {
-                             [self showAlertWithTitle:@"City not found" andText:nil andButtonNamed:@"Ok"];
-                         }
-                         else if ([responseCode integerValue] != 200) {
-                             NSString *message = dict[@"message"];
-                             if (message) [self showAlertWithTitle:@"Error" andText:message andButtonNamed:@"Ok"];
-                         }
-                         else {
+                         dispatch_async(dispatch_get_main_queue(), ^(){
                              [self addNewCity:forecast];
-                         }
+                         });
                      }
-                 });
+                 }
              }
              else [self showUnknownError];
              // BLOCK END
@@ -149,40 +170,29 @@
             NSLog(@"(!) Response: %@ ", response);
             NSLog(@"(!) Serialized data: %@ ", dict);
             
-            // UI changes, main thread
-            dispatch_async(dispatch_get_main_queue(), ^(){
-                if (error) {
-                    [self showAlertWithTitle:@"Error" andText:error.description andButtonNamed:@"Ok"];
-                    NSLog(@"(!) Error %ld: %@ ", error.code, error.description);
+            // UI changes
+            if (error) {
+                [self showAlertWithTitle:@"Error" andText:error.description andButtonNamed:@"Ok"];
+                NSLog(@"(!) Error %ld: %@ ", error.code, error.description);
+            }
+            else {
+                NSNumber *responseCode = dict[@"cod"];
+                if (responseCode && [responseCode integerValue] != 200) {
+                    [self showUnknownError];
                 }
                 else {
-                    NSNumber *responseCode = dict[@"cod"];
-                    if (responseCode && [responseCode integerValue] != 200) {
-                        [self showUnknownError];
-                    }
-                    else {
+                    dispatch_async(dispatch_get_main_queue(), ^(){
                         [self addCitiesFromArray:forecastArray];
-                    }
+                    });
                 }
-            });
+            }
         }
         else [self showUnknownError];
         // BLOCK END
     }];
 }
 
-- (IBAction)mapButtonPressed:(id)sender {
-    MapViewController *mapVC = [[MapViewController alloc] init];
-    mapVC.completionBlock = ^(CGPoint point) {
-        [self fetchForecastForCityByName:nil orCoordinates:point];
-    };
-    
-    [self.navigationController pushViewController:mapVC animated:YES];
-}
-
-- (IBAction)addNewCityButtonPressed:(id)sender {
-    [self fetchForecastForCityByName: _addCityTextField.text];
-}
+#pragma mark - Data array methods
 
 - (void)addNewCity:(ForecastModel *)forecast {
     [_forecastArray addObject:forecast];
@@ -212,6 +222,29 @@
     [ForecastModel deleteCityForecastFromDB:idToDelete];
 }
 
+#pragma mark - IBActions
+
+- (IBAction)mapButtonPressed:(id)sender {
+    MapViewController *mapVC = [[MapViewController alloc] init];
+    mapVC.completionBlock = ^(CGPoint point) {
+        [self fetchForecastForCityByName:nil orCoordinates:point];
+    };
+    
+    [[self navigationItem] setBackBarButtonItem:
+     [[UIBarButtonItem alloc] initWithTitle:@" " style:UIBarButtonItemStylePlain
+                                     target:nil action:nil]]; // rename back button
+    
+    [self.navigationController pushViewController:mapVC animated:YES];
+}
+
+- (IBAction)addNewCityButtonPressed:(id)sender {
+    [self fetchForecastForCityByName: _addCityTextField.text];
+}
+
+- (IBAction)doneButtonFromKeyboardPressed:(id)sender {
+    [self.view endEditing:YES];
+}
+
 #pragma mark - UITableViewDelegate
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -228,7 +261,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     CityWeatherCell *cell =  [tableView dequeueReusableCellWithIdentifier:@"cityWeatherCell"];
-    [cell initWithForecast:[_forecastArray objectAtIndex:indexPath.row]];
+    [cell updateWithForecast:[_forecastArray objectAtIndex:indexPath.row]];
     return cell;
 }
 
@@ -240,23 +273,51 @@
     return @[deleteAction];
 }
 
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
+}
+
 #pragma mark - Misc methods
 
-- (void)showAlertWithTitle:(NSString *)title andText:(NSString *)text andButtonNamed:(NSString *)buttonName {
-    UIAlertController* alert = [UIAlertController
-                                alertControllerWithTitle:title
-                                message:text
-                                preferredStyle:UIAlertControllerStyleAlert];
+- (void)keyboardWillShow:(NSNotification *)notification {
+    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
-    UIAlertAction* ok = [UIAlertAction
-                         actionWithTitle:buttonName
-                         style:UIAlertActionStyleDefault
-                         handler:^(UIAlertAction * action)
-                         {
-                         }];
+    UIEdgeInsets contentInsets;
+    if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
+        contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height), 0.0);
+    } else {
+        contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0);
+    }
+    
+    self.tableView.contentInset = contentInsets;
+    self.tableView.scrollIndicatorInsets = contentInsets;
+}
 
-    [alert addAction:ok];
-    [self presentViewController:alert animated:YES completion:nil];
+- (void)keyboardWillHide:(NSNotification *)notification {
+    self.tableView.contentInset = UIEdgeInsetsZero;
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
+}
+
+- (void)showAlertWithTitle:(NSString *)title andText:(NSString *)text andButtonNamed:(NSString *)buttonName {
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        UIAlertController* alert = [UIAlertController
+                                    alertControllerWithTitle:title
+                                    message:text
+                                    preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* ok = [UIAlertAction
+                             actionWithTitle:buttonName
+                             style:UIAlertActionStyleDefault
+                             handler:^(UIAlertAction * action)
+                             {
+                             }];
+        
+        [alert addAction:ok];
+        [self presentViewController:alert animated:YES completion:nil];
+    });
 }
 
 - (void)showUnknownError {
