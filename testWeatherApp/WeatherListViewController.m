@@ -93,66 +93,83 @@
 
 #pragma mark - API-related
 
-- (void)fetchForecastForCityByName:(NSString *)cityName {
-    [self fetchForecastForCityByName:cityName orCoordinates:CGPointMake(0, 0)];
-}
-
-- (void)fetchForecastForCityByName:(NSString *)cityName orCoordinates:(CGPoint)point { // single city
-    // check if already in list
-    BOOL alreadyInList = NO;
-    if (cityName) {
+- (void)fetchForecastForCityByName:(NSString *)cityName { // single city
+    if (cityName && ![cityName isEqualToString:@""]) {
+        // check if already in list
+        BOOL alreadyInList = NO;
         for (ForecastModel *forecast in _forecastArray) {
             if ([forecast.city isEqualToString:cityName]) alreadyInList = YES;
         }
-    }
-    if (alreadyInList) {
-        [self showAlertWithTitle:@"City is already in list" andText:nil andButtonNamed:@"Ok"];
-    }
-    else { // if not, then add
-        [self showProgressView:YES];
-        [ApiManager
-         fetchForecastForCityByName:cityName orCoordinates:point
-         withCompletion:^(NSData *data,
-                          NSURLResponse *response,
-                          NSError *error) {
-             [self showProgressView:NO];
-             if (data) {
-                 NSDictionary *dict =
-                 [NSJSONSerialization JSONObjectWithData:data
-                                                 options:NSJSONReadingAllowFragments error:nil];
-                 ForecastModel *forecast = [ForecastModel initWithDictionary:dict];
-                 
-                 NSLog(@"(!) Response: %@ ", response);
-                 NSLog(@"(!) Serialized data: %@ ", dict);
-                 
-                 // UI changes
-                 
-                 if (error) {
-                     [self showAlertWithTitle:@"Error" andText:error.description andButtonNamed:@"Ok"];
-                     NSLog(@"(!) Error %ld: %@ ", error.code, error.description);
+        if (alreadyInList) {
+            [self showAlertWithTitle:@"City is already in list" andText:nil andButtonNamed:@"Ok"];
+        }
+        else { // if not, then add
+            [self showProgressView:YES];
+            [ApiManager
+             fetchForecastForCityByNameApi:cityName
+             withCompletion:^(NSData *data,
+                              NSURLResponse *response,
+                              NSError *error) {
+                 [self showProgressView:NO];
+                 if (data) {
+                     [self proceedAddingCityWithData:data andResponse:response andError:error];
                  }
-                 else {
-                     NSNumber *responseCode = dict[@"cod"];
-                     if (!responseCode) {
-                         [self showUnknownError];
-                     }
-                     else if ([responseCode integerValue] == 404) {
-                         [self showAlertWithTitle:@"City not found" andText:nil andButtonNamed:@"Ok"];
-                     }
-                     else if ([responseCode integerValue] != 200) {
-                         NSString *message = dict[@"message"];
-                         if (message) [self showAlertWithTitle:@"Error" andText:message andButtonNamed:@"Ok"];
-                     }
-                     else {
-                         dispatch_async(dispatch_get_main_queue(), ^(){
-                             [self addNewCity:forecast];
-                         });
-                     }
-                 }
-             }
-             else [self showUnknownError];
-             // BLOCK END
-         }];
+                 else [self showUnknownError];
+                 // BLOCK END
+             }];
+        }
+    }
+}
+
+- (void)fetchForecastForCityByCoordinates:(CGPoint)point { // single city
+    [self showProgressView:YES];
+    [ApiManager
+     fetchForecastForCityByCoordinatesApi:point
+     withCompletion:^(NSData *data,
+                      NSURLResponse *response,
+                      NSError *error) {
+         [self showProgressView:NO];
+         if (data) {
+             [self proceedAddingCityWithData:data andResponse:response andError:error];
+         }
+         else [self showUnknownError];
+         // BLOCK END
+     }];
+}
+
+- (void)proceedAddingCityWithData:(NSData *)data andResponse:(NSURLResponse *)response
+                         andError:(NSError *)error {
+    NSDictionary *dict =
+    [NSJSONSerialization JSONObjectWithData:data
+                                    options:NSJSONReadingAllowFragments error:nil];
+    ForecastModel *forecast = [ForecastModel initWithDictionary:dict];
+    
+    NSLog(@"(!) Response: %@ ", response);
+    NSLog(@"(!) Serialized data: %@ ", dict);
+    
+    // UI changes
+    
+    if (error) {
+        [self showAlertWithTitle:@"Error" andText:error.description andButtonNamed:@"Ok"];
+        NSLog(@"(!) Error %ld: %@ ", error.code, error.description);
+    }
+    else {
+        NSNumber *responseCode = dict[@"cod"];
+        if (!responseCode) {
+            [self showUnknownError];
+        }
+        else if ([responseCode integerValue] == 404) {
+            [self showAlertWithTitle:@"City not found" andText:nil andButtonNamed:@"Ok"];
+        }
+        else if ([responseCode integerValue] != 200) {
+            NSString *message = dict[@"message"];
+            if (message) [self showAlertWithTitle:@"Error" andText:message andButtonNamed:@"Ok"];
+        }
+        else {
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [self addNewCity:forecast];
+            });
+        }
     }
 }
 
@@ -227,7 +244,7 @@
 - (IBAction)mapButtonPressed:(id)sender {
     MapViewController *mapVC = [[MapViewController alloc] init];
     mapVC.completionBlock = ^(CGPoint point) {
-        [self fetchForecastForCityByName:nil orCoordinates:point];
+        [self fetchForecastForCityByCoordinates:point];
     };
     
     [[self navigationItem] setBackBarButtonItem:

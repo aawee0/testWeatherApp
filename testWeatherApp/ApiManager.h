@@ -3,9 +3,11 @@
 
 @interface ApiManager : NSObject
 
-+ (void)fetchForecastForCityByName:(NSString *)cityName
-                        orCoordinates:(CGPoint)point
++ (void)fetchForecastForCityByNameApi:(NSString *)cityName
                        withCompletion:(void(^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
+
++ (void)fetchForecastForCityByCoordinatesApi:(CGPoint)point
+                              withCompletion:(void(^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
 
 + (void)fetchForecastForSeveralCitiesApi:(NSArray *)cityIdsArray
                           withCompletion:(void(^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;

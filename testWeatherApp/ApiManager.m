@@ -3,20 +3,19 @@
 
 @implementation ApiManager
 
-+ (void)fetchForecastForCityByName:(NSString *)cityName
-                        orCoordinates:(CGPoint)point
++ (void)fetchForecastForCityByNameApi:(NSString *)cityName
                        withCompletion:(void(^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
+    NSString *safeCityName = [cityName stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+    NSString *paramsString = [[NSString alloc] initWithFormat:@"%@weather?q=%@&appid=%@",
+                              OWMAP_APIURL, safeCityName, APPID];
     
-    NSString *paramsString;
-    if (cityName) { // by city name
-        NSString *safeCityName = [cityName stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
-        paramsString = [[NSString alloc] initWithFormat:@"%@weather?q=%@&appid=%@",
-                        OWMAP_APIURL, safeCityName, APPID];
-    }
-    else { // by coordinates
-        paramsString = [[NSString alloc] initWithFormat:@"%@weather?lat=%f&lon=%f&appid=%@",
-                        OWMAP_APIURL, point.x, point.y, APPID];
-    }
+    [ApiManager sendGETRequestWithParams:paramsString withCompletion:completionHandler];
+}
+
++ (void)fetchForecastForCityByCoordinatesApi:(CGPoint)point
+                              withCompletion:(void(^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
+    NSString *paramsString = [[NSString alloc] initWithFormat:@"%@weather?lat=%f&lon=%f&appid=%@",
+                    OWMAP_APIURL, point.x, point.y, APPID];
     
     [ApiManager sendGETRequestWithParams:paramsString withCompletion:completionHandler];
 }
