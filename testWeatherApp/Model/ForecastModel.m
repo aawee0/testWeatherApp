@@ -23,32 +23,42 @@
     NSString *cityName = dict[@"name"];
     if (cityName) forecast.city = cityName;
     
-    NSNumber *cityId = dict[@"id"];
-    if (cityId) forecast.cityId = [cityId stringValue];
+    NSDictionary *cityIdDict = dict[@"id"];
+    if (cityIdDict && [cityIdDict isKindOfClass:[NSNumber class]]) {
+        NSNumber *cityId = (NSNumber *)cityIdDict;
+        forecast.cityId = [cityId stringValue];
+    }
     
     NSDictionary *main = dict[@"main"];
     if (main) {
-        NSNumber *tempMax = main[@"temp_max"];
-        if (tempMax) forecast.tempMax = [ForecastModel convertToCelsius:[tempMax floatValue]];
-        //if (tempMax) forecast.tempMax = tempMax;
+        NSDictionary *tempMaxDict = main[@"temp_max"];
+        if (tempMaxDict && [tempMaxDict isKindOfClass:[NSNumber class]]) {
+            NSNumber *tempMax = (NSNumber *)tempMaxDict;
+            forecast.tempMax = [ForecastModel convertToCelsius:[tempMax floatValue]];
+        }
 
-        NSNumber *tempMin = main[@"temp_min"];
-        if (tempMin) forecast.tempMin = [ForecastModel convertToCelsius:[tempMin floatValue]];
-        //if (tempMin) forecast.tempMin = tempMin;
+        NSDictionary *tempMinDict = main[@"temp_min"];
+        if (tempMinDict && [tempMinDict isKindOfClass:[NSNumber class]]) {
+            NSNumber *tempMin = (NSNumber *)tempMinDict;
+            forecast.tempMin = [ForecastModel convertToCelsius:[tempMin floatValue]];
+        }
     }
     
-    NSArray *weather = dict[@"weather"];
-    if (weather && weather.count > 0) {
-        NSDictionary *dominantWeatherType = [weather objectAtIndex:0];
-        
-        NSString *desc = dominantWeatherType[@"main"];
-        if (desc) forecast.desc = desc;
-        
-        NSNumber *weatherId = dominantWeatherType[@"id"];
-        if (weatherId) forecast.weatherId = [weatherId integerValue];
-        
-        NSString *icon = dominantWeatherType[@"icon"];
-        if (icon) forecast.weatherIcon = icon;
+    NSDictionary *weatherDict = dict[@"weather"];
+    if (weatherDict && [weatherDict isKindOfClass:[NSArray class]]) {
+        NSArray *weather = (NSArray *)weatherDict;
+        if (weather.count) {
+            NSDictionary *dominantWeatherType = [weather objectAtIndex:0];
+            
+            NSString *desc = dominantWeatherType[@"main"];
+            if (desc) forecast.desc = desc;
+            
+            NSNumber *weatherId = dominantWeatherType[@"id"];
+            if (weatherId) forecast.weatherId = [weatherId integerValue];
+            
+            NSString *icon = dominantWeatherType[@"icon"];
+            if (icon) forecast.weatherIcon = icon;
+        }
     }
 
     return forecast;
@@ -57,10 +67,10 @@
 + (NSArray *)initForecastArrayWithDictionary:(NSDictionary *)dict {
     NSMutableArray *forecastArray = [[NSMutableArray alloc] init];
     
-    NSArray *list = dict[@"list"];
-    if (list) {
-        for (int i = 0; i < list.count; i++) {
-            [forecastArray addObject: [ForecastModel initWithDictionary: [list objectAtIndex:i]]];
+    NSDictionary *listDict = dict[@"list"];
+    if (listDict && [listDict isKindOfClass:[NSArray class]]) {
+        for (NSDictionary *forecastDict in listDict) {
+            [forecastArray addObject: [ForecastModel initWithDictionary: forecastDict]];
         }
     }
     
