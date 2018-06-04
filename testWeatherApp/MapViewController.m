@@ -27,7 +27,7 @@
     
     UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc]
                                                          initWithTarget:self action:@selector(handleLongPress:)];
-    longPressRecognizer.minimumPressDuration = 2.0; // time of press
+    longPressRecognizer.minimumPressDuration = 1.0; // time of press
     [self.mapView addGestureRecognizer:longPressRecognizer];
 }
 
