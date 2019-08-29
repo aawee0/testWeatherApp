@@ -105,11 +105,7 @@
         }
         else { // if not, then add
             [self showProgressView:YES];
-            [ApiManager
-             fetchForecastForCityByNameApi:cityName
-             withCompletion:^(NSData *data,
-                              NSURLResponse *response,
-                              NSError *error) {
+            [ApiManager fetchForecastForCityByNameApi:cityName withCompletion:^(NSData *data, NSURLResponse *response, NSError *error) {
                  [self showProgressView:NO];
                  if (data) {
                      [self proceedAddingCityWithData:data andResponse:response andError:error];
@@ -123,11 +119,9 @@
 
 - (void)fetchForecastForCityByCoordinates:(CGPoint)point { // single city
     [self showProgressView:YES];
-    [ApiManager
-     fetchForecastForCityByCoordinatesApi:point
-     withCompletion:^(NSData *data,
-                      NSURLResponse *response,
-                      NSError *error) {
+    [ApiManager fetchForecastForCityByCoordinatesApi:point withCompletion:^(NSData *data,
+                                                                            NSURLResponse *response,
+                                                                            NSError *error) {
          [self showProgressView:NO];
          if (data) {
              [self proceedAddingCityWithData:data andResponse:response andError:error];
@@ -175,9 +169,7 @@
 
 - (void)fetchForecastForCityList:(NSArray *)cities withProgressView:(BOOL)progressView {
     if (progressView) [self showProgressView:YES];
-    [ApiManager fetchForecastForSeveralCitiesApi:cities withCompletion:^(NSData *data,
-                                                                  NSURLResponse *response,
-                                                                  NSError *error) {
+    [ApiManager fetchForecastForSeveralCitiesApi:cities withCompletion:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (progressView) [self showProgressView:NO];
         if (data) {
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
