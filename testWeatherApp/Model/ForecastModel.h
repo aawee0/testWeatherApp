@@ -1,5 +1,6 @@
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 
 @interface ForecastModel : NSObject
 
@@ -11,14 +12,8 @@
 @property (nonatomic, readonly) NSInteger weatherId;
 @property (strong, nonatomic, readonly) NSString *weatherIcon;
 
-// initialization
-+ (ForecastModel *)initWithDictionary:(NSDictionary *)dict;
-+ (NSArray *)initForecastArrayWithDictionary:(NSDictionary *)dict;
-
-// Core Data related methods
-+ (void)updateCityForecastDB:(ForecastModel *)forecast;
-+ (NSArray *)getAllCityForecastsFromDB;
-+ (void)updateCityForecastsInDB:(NSArray *)forecastArray;
-+ (void)deleteCityForecastFromDB:(NSString *)cityID;
++ (ForecastModel *)forecastWithDictionary:(NSDictionary *)dict;
++ (ForecastModel *)forecastWithEntity:(NSManagedObject *)forecastEntity;
++ (NSArray *)forecastArrayWithDictionary:(NSDictionary *)dict;
 
 @end

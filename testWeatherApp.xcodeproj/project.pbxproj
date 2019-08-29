@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A7AD704231806D60031FFA6 /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A7AD703231806D60031FFA6 /* CoreDataManager.m */; };
 		861579DE20C061D800D8F01F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 861579DD20C061D800D8F01F /* AppDelegate.m */; };
 		861579E720C061D800D8F01F /* testWeatherApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 861579E520C061D800D8F01F /* testWeatherApp.xcdatamodeld */; };
 		861579E920C061DE00D8F01F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 861579E820C061DE00D8F01F /* Assets.xcassets */; };
@@ -23,6 +24,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1A7AD702231806D60031FFA6 /* CoreDataManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
+		1A7AD703231806D60031FFA6 /* CoreDataManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
 		861579D920C061D800D8F01F /* testWeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = testWeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		861579DC20C061D800D8F01F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		861579DD20C061D800D8F01F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -58,6 +61,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A7AD701231806A90031FFA6 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				1A7AD702231806D60031FFA6 /* CoreDataManager.h */,
+				1A7AD703231806D60031FFA6 /* CoreDataManager.m */,
+			);
+			name = CoreData;
+			sourceTree = "<group>";
+		};
 		861579D020C061D800D8F01F = {
 			isa = PBXGroup;
 			children = (
@@ -89,6 +101,7 @@
 				86157A0620C104F300D8F01F /* Api */,
 				86157A0220C0FCEE00D8F01F /* Model */,
 				861579FA20C0640C00D8F01F /* Cells */,
+				1A7AD701231806A90031FFA6 /* CoreData */,
 				861579E820C061DE00D8F01F /* Assets.xcassets */,
 				861579ED20C061DE00D8F01F /* Info.plist */,
 				861579EE20C061DE00D8F01F /* main.m */,
@@ -201,6 +214,7 @@
 				86F679AB20C1054800760977 /* ApiManager.m in Sources */,
 				86157A0520C0FDFD00D8F01F /* ForecastModel.m in Sources */,
 				861579E720C061D800D8F01F /* testWeatherApp.xcdatamodeld in Sources */,
+				1A7AD704231806D60031FFA6 /* CoreDataManager.m in Sources */,
 				86A35E0920C252D600CD770E /* MapViewController.m in Sources */,
 				861579EF20C061DE00D8F01F /* main.m in Sources */,
 				861579FE20C0643F00D8F01F /* CityWeatherCell.m in Sources */,

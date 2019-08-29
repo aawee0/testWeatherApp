@@ -8,5 +8,7 @@
 
 #define sharedAppDelegate ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 
+#import "ForecastModel.h"
+#import "CoreDataManager.h"
 
 #endif

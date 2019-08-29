@@ -5,9 +5,6 @@
 
 #import "ApiManager.h"
 
-#import "ForecastModel.h"
-
-
 @interface WeatherListViewController ()
 
 @property (nonatomic, weak) IBOutlet UITextField *addCityTextField;
@@ -47,7 +44,7 @@
     
     // PREFETCH: use forecasts from Core Data
     _forecastArray = [[NSMutableArray alloc] initWithArray:
-                      [ForecastModel getAllCityForecastsFromDB]];
+                      [[CoreDataManager sharedManager] getAllCityForecastsFromDB]];
     [_tableView reloadData];
 }
 
@@ -119,9 +116,7 @@
 
 - (void)fetchForecastForCityByCoordinates:(CGPoint)point { // single city
     [self showProgressView:YES];
-    [ApiManager fetchForecastForCityByCoordinatesApi:point withCompletion:^(NSData *data,
-                                                                            NSURLResponse *response,
-                                                                            NSError *error) {
+    [ApiManager fetchForecastForCityByCoordinatesApi:point withCompletion:^(NSData *data, NSURLResponse *response, NSError *error) {
          [self showProgressView:NO];
          if (data) {
              [self proceedAddingCityWithData:data andResponse:response andError:error];
@@ -133,10 +128,9 @@
 
 - (void)proceedAddingCityWithData:(NSData *)data andResponse:(NSURLResponse *)response
                          andError:(NSError *)error {
-    NSDictionary *dict =
-    [NSJSONSerialization JSONObjectWithData:data
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
                                     options:NSJSONReadingAllowFragments error:nil];
-    ForecastModel *forecast = [ForecastModel initWithDictionary:dict];
+    ForecastModel *forecast = [ForecastModel forecastWithDictionary:dict];
     
     NSLog(@"(!) Response: %@ ", response);
     NSLog(@"(!) Serialized data: %@ ", dict);
@@ -174,7 +168,7 @@
         if (data) {
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
                                                                  options:NSJSONReadingAllowFragments error:nil];
-            NSArray *forecastArray = [ForecastModel initForecastArrayWithDictionary:dict];
+            NSArray *forecastArray = [ForecastModel forecastArrayWithDictionary:dict];
             
             NSLog(@"(!) Response: %@ ", response);
             NSLog(@"(!) Serialized data: %@ ", dict);
@@ -206,10 +200,11 @@
 - (void)addNewCity:(ForecastModel *)forecast {
     [_forecastArray addObject:forecast];
     _addCityTextField.text = @"";
+    [_addCityTextField resignFirstResponder];
     
     [_tableView reloadData];
     
-    [ForecastModel updateCityForecastDB:forecast];
+    [[CoreDataManager sharedManager] updateCityForecastDB:forecast];
     NSLog(@"New city added: %@ ", forecast.city);
 }
 
@@ -219,7 +214,7 @@
     
     [_tableView reloadData];
     
-    [ForecastModel updateCityForecastsInDB:cities];
+    [[CoreDataManager sharedManager] updateCityForecastsInDB:cities];
 }
 
 - (void)deleteCityAtIndex:(NSInteger)index {
@@ -228,7 +223,7 @@
     
     [_tableView reloadData];
     
-    [ForecastModel deleteCityForecastFromDB:idToDelete];
+    [[CoreDataManager sharedManager] deleteCityForecastFromDB:idToDelete];
 }
 
 #pragma mark - IBActions
