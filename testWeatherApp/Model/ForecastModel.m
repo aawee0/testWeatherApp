@@ -5,13 +5,13 @@
 
 @interface ForecastModel ()
 
-@property (strong, nonatomic) NSString *city;
-@property (strong, nonatomic) NSString *cityId;
+@property (nonatomic) NSString *city;
+@property (nonatomic) NSString *cityId;
 @property (nonatomic) NSInteger tempMax;
 @property (nonatomic) NSInteger tempMin;
-@property (strong, nonatomic) NSString *desc;
+@property (nonatomic) NSString *desc;
 @property (nonatomic) NSInteger weatherId;
-@property (strong, nonatomic) NSString *weatherIcon;
+@property (nonatomic) NSString *weatherIcon;
 
 @end
 
