@@ -7,8 +7,9 @@
 
 @interface WeatherListViewController ()
 
-@property (nonatomic, weak) IBOutlet UIView *topBackgroundView;
+@property (nonatomic, weak) IBOutlet UIView *topBackgroundView, *addButtonBackgroundView;
 @property (nonatomic, weak) IBOutlet UITextField *addCityTextField;
+@property (nonatomic, weak) IBOutlet UIButton *addButton, *mapsButton;
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
@@ -25,10 +26,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [self initTopView];
+    [self initStyles];
     [self initTableView];
     
     [_addCityTextField setReturnKeyType:UIReturnKeyDone];
+    
+    UIGestureRecognizer *tapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    tapper.cancelsTouchesInView = NO;
+    [self.view addGestureRecognizer:tapper];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
@@ -39,13 +44,6 @@
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
-}
-
-- (void)initTopView {
-    _topBackgroundView.layer.shadowColor = [UIColor blackColor].CGColor;
-    _topBackgroundView.layer.shadowOffset = CGSizeMake(0.0f, 5.0f);
-    _topBackgroundView.layer.shadowRadius = 5.0f;
-    _topBackgroundView.layer.shadowOpacity = 0.5f;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -64,8 +62,26 @@
     [self refreshTableWithProgressView:NO];
 }
 
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+- (void)initStyles {
+    _topBackgroundView.layer.shadowColor = [UIColor blackColor].CGColor;
+    _topBackgroundView.layer.shadowOffset = CGSizeMake(0.0f, 5.0f);
+    _topBackgroundView.layer.shadowRadius = 5.0f;
+    _topBackgroundView.layer.shadowOpacity = 0.5f;
+    
+    _mapsButton.layer.shadowColor = [UIColor blackColor].CGColor;
+    _mapsButton.layer.shadowOffset = CGSizeMake(2.0f, 2.0f);
+    _mapsButton.layer.shadowRadius = 2.0f;
+    _mapsButton.layer.shadowOpacity = 0.5f;
+    
+    _addButtonBackgroundView.layer.cornerRadius = _addButtonBackgroundView.frame.size.width/2.0f;
+    _addButtonBackgroundView.layer.shadowColor = [UIColor blackColor].CGColor;
+    _addButtonBackgroundView.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
+    _addButtonBackgroundView.layer.shadowRadius = 1.0f;
+    _addButtonBackgroundView.layer.shadowOpacity = 0.5f;
+}
+
+- (void)handleTap:(UITapGestureRecognizer *)sender {
+    [self.view endEditing:YES];
 }
 
 #pragma mark - Init methods
@@ -210,6 +226,7 @@
     [_forecastArray addObject:forecast];
     _addCityTextField.text = @"";
     [_addCityTextField resignFirstResponder];
+    _addButton.enabled = NO;
     
     [_tableView reloadData];
     
@@ -286,11 +303,15 @@
     return @[deleteAction];
 }
 
-#pragma mark - UITextFieldDelegate
+#pragma mark - UITextFieldDelegate & Events
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return YES;
+}
+
+- (IBAction)textFieldDidChange:(UITextField *)sender {
+    _addButton.enabled = (sender.text.length > 0);
 }
 
 #pragma mark - Misc methods
