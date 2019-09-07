@@ -7,6 +7,7 @@
 
 @interface WeatherListViewController ()
 
+@property (nonatomic, weak) IBOutlet UIView *topBackgroundView;
 @property (nonatomic, weak) IBOutlet UITextField *addCityTextField;
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
@@ -24,6 +25,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    [self initTopView];
     [self initTableView];
     
     [_addCityTextField setReturnKeyType:UIReturnKeyDone];
@@ -37,6 +39,13 @@
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+}
+
+- (void)initTopView {
+    _topBackgroundView.layer.shadowColor = [UIColor blackColor].CGColor;
+    _topBackgroundView.layer.shadowOffset = CGSizeMake(0.0f, 5.0f);
+    _topBackgroundView.layer.shadowRadius = 5.0f;
+    _topBackgroundView.layer.shadowOpacity = 0.5f;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
