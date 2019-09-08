@@ -10,14 +10,15 @@
 @property (nonatomic, weak) IBOutlet UIView *topBackgroundView, *addButtonBackgroundView;
 @property (nonatomic, weak) IBOutlet UITextField *addCityTextField;
 @property (nonatomic, weak) IBOutlet UIButton *addButton, *mapsButton;
+@property (nonatomic) UIView *placeholderView;
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic) UIRefreshControl *refreshControl;
 
 @property (nonatomic, weak) IBOutlet UIView *progressView;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
 
-@property (nonatomic, strong) NSMutableArray *forecastArray;
+@property (nonatomic) NSMutableArray *forecastArray;
 
 @end
 
@@ -52,7 +53,6 @@
     // PREFETCH: use forecasts from Core Data
     _forecastArray = [[NSMutableArray alloc] initWithArray:
                       [[CoreDataManager sharedManager] getAllCityForecastsFromDB]];
-    [_tableView reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -111,6 +111,18 @@
     
     [_refreshControl endRefreshing];
     if (idsArray.count > 0) [self fetchForecastForCityList:idsArray withProgressView:progressView];
+    else [self reloadTableView];
+}
+
+- (void)reloadTableView {
+    if (_forecastArray.count == 0) {
+        [self.view insertSubview:self.placeholderView belowSubview:_tableView];
+    }
+    else {
+        if (_placeholderView) [_placeholderView removeFromSuperview];
+    }
+    
+    [_tableView reloadData];
 }
 
 #pragma mark - API-related
@@ -228,7 +240,7 @@
     [_addCityTextField resignFirstResponder];
     _addButton.enabled = NO;
     
-    [_tableView reloadData];
+    [self reloadTableView];
     
     [[CoreDataManager sharedManager] updateCityForecastDB:forecast];
     NSLog(@"New city added: %@ ", forecast.city);
@@ -238,7 +250,7 @@
     [_forecastArray removeAllObjects];
     [_forecastArray addObjectsFromArray:cities];
     
-    [_tableView reloadData];
+    [self reloadTableView];
     
     [[CoreDataManager sharedManager] updateCityForecastsInDB:cities];
 }
@@ -247,7 +259,7 @@
     NSString *idToDelete = [[_forecastArray objectAtIndex:index] cityId];
     [_forecastArray removeObjectAtIndex:index];
     
-    [_tableView reloadData];
+    [self reloadTableView];
     
     [[CoreDataManager sharedManager] deleteCityForecastFromDB:idToDelete];
 }
@@ -314,7 +326,33 @@
     _addButton.enabled = (sender.text.length > 0);
 }
 
-#pragma mark - Misc methods
+#pragma mark - Misc
+
+- (UIView *)placeholderView {
+    if (!_placeholderView) {
+        _placeholderView = [[UIView alloc] initWithFrame:_tableView.bounds];
+        CGRect placeholderFrame = _placeholderView.frame;
+        
+        CGFloat imageViewSize = placeholderFrame.size.width/4.0f;
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, imageViewSize, imageViewSize)];
+        imageView.image = [UIImage imageNamed:@"placeholder"];
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        imageView.center = CGPointMake(placeholderFrame.size.width/2.0f, imageView.center.y);
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, CGRectGetMaxY(imageView.frame) + 10.0f, placeholderFrame.size.width, 40.0f)];
+        label.text = @"No cities yet";
+        label.textAlignment = NSTextAlignmentCenter;
+        label.textColor = [UIColor grayColor];
+        label.center = CGPointMake(placeholderFrame.size.width/2.0f, label.center.y);
+        
+        UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, placeholderFrame.size.width, CGRectGetMaxY(label.frame))];
+        containerView.center = CGPointMake(containerView.center.x, placeholderFrame.size.height/2.0f);
+        [containerView addSubview:imageView];
+        [containerView addSubview:label];
+        [_placeholderView addSubview:containerView];
+    }
+    return _placeholderView;
+}
 
 - (void)keyboardWillShow:(NSNotification *)notification {
     CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
@@ -361,6 +399,7 @@
 - (void)showProgressView:(BOOL)show {
     dispatch_async(dispatch_get_main_queue(), ^(){
         self.progressView.hidden = !show;
+        self.placeholderView.hidden = !self.progressView.hidden;
     });
 }
 

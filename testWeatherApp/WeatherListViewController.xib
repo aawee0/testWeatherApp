@@ -28,30 +28,9 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="txf-Th-GUy">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                    <subviews>
-                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="dde-p1-Ive">
-                            <rect key="frame" x="177.5" y="287" width="20" height="20"/>
-                        </activityIndicatorView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading. Please wait..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fNE-Fr-0D9">
-                            <rect key="frame" x="102.5" y="323" width="170" height="21"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstItem="fNE-Fr-0D9" firstAttribute="centerX" secondItem="dde-p1-Ive" secondAttribute="centerX" id="0ry-Mm-Tqp"/>
-                        <constraint firstItem="fNE-Fr-0D9" firstAttribute="centerX" secondItem="txf-Th-GUy" secondAttribute="centerX" id="WK2-p5-tDo"/>
-                        <constraint firstItem="fNE-Fr-0D9" firstAttribute="top" secondItem="dde-p1-Ive" secondAttribute="bottom" constant="16" id="dYg-TT-Qav"/>
-                        <constraint firstItem="fNE-Fr-0D9" firstAttribute="centerY" secondItem="txf-Th-GUy" secondAttribute="centerY" id="eqT-fV-ccv"/>
-                    </constraints>
-                </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dNV-4f-ttd">
                     <rect key="frame" x="0.0" y="110" width="375" height="557"/>
-                    <color key="backgroundColor" red="0.90980392156862744" green="0.92156862745098034" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="qZ7-ln-cPn"/>
@@ -127,8 +106,29 @@
                         <constraint firstAttribute="bottom" secondItem="GSI-7A-nlj" secondAttribute="bottom" constant="30" id="ku6-Hq-QDV"/>
                     </constraints>
                 </view>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="txf-Th-GUy">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <subviews>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="dde-p1-Ive">
+                            <rect key="frame" x="177.5" y="287" width="20" height="20"/>
+                        </activityIndicatorView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading. Please wait..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fNE-Fr-0D9">
+                            <rect key="frame" x="102.5" y="323" width="170" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="fNE-Fr-0D9" firstAttribute="centerX" secondItem="dde-p1-Ive" secondAttribute="centerX" id="0ry-Mm-Tqp"/>
+                        <constraint firstItem="fNE-Fr-0D9" firstAttribute="centerX" secondItem="txf-Th-GUy" secondAttribute="centerX" id="WK2-p5-tDo"/>
+                        <constraint firstItem="fNE-Fr-0D9" firstAttribute="top" secondItem="dde-p1-Ive" secondAttribute="bottom" constant="16" id="dYg-TT-Qav"/>
+                        <constraint firstItem="fNE-Fr-0D9" firstAttribute="centerY" secondItem="txf-Th-GUy" secondAttribute="centerY" id="eqT-fV-ccv"/>
+                    </constraints>
+                </view>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" red="0.90980392156862744" green="0.92156862745098034" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="xFr-LP-UZ8" firstAttribute="trailing" secondItem="5Wg-fQ-y1D" secondAttribute="trailing" id="5TS-WX-nhk"/>
                 <constraint firstItem="sp5-AY-cl0" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="5dX-c6-ih3"/>
