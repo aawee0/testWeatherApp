@@ -30,8 +30,6 @@
     [self initStyles];
     [self initTableView];
     
-    [_addCityTextField setReturnKeyType:UIReturnKeyDone];
-    
     UIGestureRecognizer *tapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     tapper.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tapper];
